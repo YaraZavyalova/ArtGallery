@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 align="center">Изображение</h1>
+<form method="POST" action="{{ url_for('search') }}" class="d-flex">
+    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searched" hx-get="/search">
+</form>
+{% for item in art%}
+<div class="col-md6 border rounded">
+    <h2>{{item.title}}</h2>
+    <div>
+        Description: {{item.description}}
+    </div>
+    <div>
+        <img src="{{  url_for('serve_image', filename=item.content) }}" alt="Art">
+    </div>
+    <div>
+        Автор - {{item.artist_user.name}}, Дата написания - {{item.post_date}}
+    </div>
+    {% if current_user.is_authenticated and current_user.id == item.artist %}
+        <div>
+            <a href="/art/{{ item.id }}" class="btn btn-warning">
+                Изменить
+            </a>
+            <a href="/art_delete/{{ item.id }}" class="btn btn-danger">
+                Удалить
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endfor %}
+{% endblock %}

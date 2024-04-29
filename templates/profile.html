@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ current_user.name }} Профиль</h1>
+<h3>Немного о себе:</h3>
+<h4>{{ current_user.about_me }}</h4>
+<h1 align="center">Твои Изображение</h1>
+{% for item in art%}
+<div class="col-md6 border rounded">
+    <h2>{{item.title}}</h2>
+    <div>
+        Description: {{item.description}}
+    </div>
+    <div>
+        <img src="{{  url_for('serve_image', filename=item.content) }}" alt="Art">
+    </div>
+    <div>
+        Автор - {{item.artist_user.name}}, Дата написания - {{item.post_date}}
+    </div>
+    {% if current_user.is_authenticated and current_user.id == item.artist %}
+        <div>
+            <a href="/art/{{ item.id }}" class="btn btn-warning">
+                Изменить
+            </a>
+            <a href="/art_delete/{{ item.id }}" class="btn btn-danger">
+                Удалить
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endfor %}
+{% endblock %}
